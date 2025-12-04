@@ -60,6 +60,22 @@ class CoordinateTest {
     }
 
     @Test
+    void adjacent() {
+        Coordinate origin = new Coordinate(4, 5);
+        Set<Coordinate> expected = Set.of(
+                new Coordinate(3, 5),
+                new Coordinate(3, 6),
+                new Coordinate(3, 4),
+                new Coordinate(5, 5),
+                new Coordinate(5, 6),
+                new Coordinate(5, 4),
+                new Coordinate(4, 6),
+                new Coordinate(4, 4)
+        );
+        assertEquals(expected, origin.adjacent());
+    }
+
+    @Test
     void addRow() {
         Coordinate origin = new Coordinate(4, 7);
         assertEquals(new Coordinate(9, 7), origin.addRow(5));

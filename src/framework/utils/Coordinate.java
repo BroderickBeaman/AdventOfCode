@@ -68,6 +68,24 @@ public record Coordinate(Integer row, Integer col) {
     }
 
     /**
+     * Returns a set of coordinates orthogonally and diagonally adjacent to this coordinate
+     *
+     * @return The set of adjacent coordinates
+     */
+    public Set<Coordinate> adjacent() {
+        return Set.of(
+                addDirection(Direction.N),
+                addDirection(Direction.N).addDirection(Direction.E),
+                addDirection(Direction.E),
+                addDirection(Direction.S).addDirection(Direction.E),
+                addDirection(Direction.S),
+                addDirection(Direction.S).addDirection(Direction.W),
+                addDirection(Direction.W),
+                addDirection(Direction.N).addDirection(Direction.W)
+        );
+    }
+
+    /**
      * Return a new Coordinate with the row value incremented by the specified amount
      *
      * @param row The amount to increment
