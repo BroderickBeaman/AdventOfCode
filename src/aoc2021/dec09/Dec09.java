@@ -17,7 +17,7 @@ public class Dec09 extends AOCParent {
 
     @Override
     public void part1() {
-        long sum = oceanFloor.findAll(location -> {
+        long sum = oceanFloor.findAllMatching(location -> {
             return location.orthogonal().stream()
                     .filter(oceanFloor::isInBounds)
                     .noneMatch(test -> oceanFloor.get(test) <= oceanFloor.get(location));
@@ -27,7 +27,7 @@ public class Dec09 extends AOCParent {
 
     @Override
     public void part2() {
-        List<Coordinate> lowPoints = oceanFloor.findAll(location -> {
+        List<Coordinate> lowPoints = oceanFloor.findAllMatching(location -> {
             return location.orthogonal().stream()
                     .filter(oceanFloor::isInBounds)
                     .noneMatch(test -> oceanFloor.get(test) <= oceanFloor.get(location));

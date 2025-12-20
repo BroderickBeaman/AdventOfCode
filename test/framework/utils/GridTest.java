@@ -1,7 +1,5 @@
 package framework.utils;
 
-import framework.utils.Coordinate;
-import framework.utils.Grid;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -17,6 +15,13 @@ class GridTest {
         Grid<Integer> intGrid = new Grid<>(intArrays);
         assertEquals(Integer.valueOf(2), intGrid.rows());
         assertEquals(Integer.valueOf(3), intGrid.cols());
+    }
+
+    @Test
+    void size() {
+        Integer[][] intArrays = {{1,2,3}, {4,5,6}};
+        Grid<Integer> intGrid = new Grid<>(intArrays);
+        assertEquals(6, intGrid.size());
     }
 
     @Test
@@ -82,10 +87,39 @@ class GridTest {
     }
 
     @Test
-    void findAll() {
+    void findAllMatching() {
         Integer[][] intArrays = {{1,2,4}, {4,5,6}};
         Grid<Integer> grid = new Grid<>(intArrays);
-        List<Coordinate> locations = grid.findAll(location -> grid.get(location) > 5);
+        List<Coordinate> locations = grid.findAllMatching(location -> grid.get(location) > 5);
         assertEquals(List.of(new Coordinate(1, 2)), locations);
+    }
+
+    @Test
+    void findAllMatchingValue() {
+        Integer[][] intArrays = {{1,2,4}, {4,5,6}};
+        Grid<Integer> grid = new Grid<>(intArrays);
+        List<Coordinate> locations = grid.findAllMatchingValue(value -> value < 2);
+        assertEquals(List.of(new Coordinate(0, 0)), locations);
+    }
+
+    @Test
+    void applyToAll() {
+        Integer[][] intArraysTest = {{1,2,4}, {4,5,6}};
+        Grid<Integer> test = new Grid<>(intArraysTest);
+        Integer[][] intArraysExpected = {{2,3,5}, {5,6,7}};
+        Grid<Integer> expected = new Grid<>(intArraysExpected);
+        test.applyToAll(value -> value + 1);
+        assertEquals(expected, test);
+    }
+
+    @Test
+    void applyToLocation() {
+        Integer[][] intArraysTest = {{1,2,4}, {4,5,6}};
+        Grid<Integer> test = new Grid<>(intArraysTest);
+        Integer[][] intArraysExpected = {{1,4,4}, {4,8,6}};
+        test.applyToLocation(value -> value + 2, new Coordinate(0, 1));
+        test.applyToLocation(value -> value + 3, 1, 1);
+        Grid<Integer> expected = new Grid<>(intArraysExpected);
+        assertEquals(expected, test);
     }
 }

@@ -1,10 +1,8 @@
 package framework.utils;
 
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
@@ -49,6 +47,14 @@ public class Grid<T> {
      */
     public Integer cols() {
         return grid[0].length;
+    }
+
+    /**
+     * Returns the size of the grid (rows * cols)
+     * @return The size of the grid
+     */
+    public Integer size() {
+        return cols() * rows();
     }
 
     /**
@@ -170,7 +176,7 @@ public class Grid<T> {
      * @param criteria The criteria to evaluate
      * @return All locations that meet the criteria
      */
-    public List<Coordinate> findAll(Predicate<Coordinate> criteria) {
+    public List<Coordinate> findAllMatching(Predicate<Coordinate> criteria) {
         List<Coordinate> locations = new ArrayList<>();
         for (int row = 0; row < rows(); row++) {
             for (int col = 0; col < cols(); col++) {
@@ -181,6 +187,73 @@ public class Grid<T> {
             }
         }
         return locations;
+    }
+
+    /**
+     * Finds all locations where a specified criteria (applied to the value at the location) is matched
+     * @param criteria The criteria to evaluate
+     * @return All locations that meet the criteria
+     */
+    public List<Coordinate> findAllMatchingValue(Predicate<T> criteria) {
+        List<Coordinate> locations = new ArrayList<>();
+        for (int row = 0; row < rows(); row++) {
+            for (int col = 0; col < cols(); col++) {
+                Coordinate at = new Coordinate(row, col);
+                if (criteria.test(get(at))) {
+                    locations.add(at);
+                }
+            }
+        }
+        return locations;
+    }
+
+    /**
+     * Finds any location where a specified criteria is matched
+     * @param criteria The criteria to evaluate
+     * @return The location (if any) matching the criteria
+     */
+    public Optional<Coordinate> findAnyMatching(Predicate<Coordinate> criteria) {
+        return Optional.ofNullable(findAllMatching(criteria).getFirst());
+    }
+
+    /**
+     * Finds any location where a specified criteria (applied to the value at the location) is matched
+     * @param criteria The criteria to evaluate
+     * @return The location (if any) matching the criteria
+     */
+    public Optional<Coordinate> findAnyMatchingValue(Predicate<T> criteria) {
+        return Optional.ofNullable(findAllMatchingValue(criteria).getFirst());
+    }
+
+    /**
+     * Applies the specified operation on all elements of the grid
+     * @param function The operation to apply
+     */
+    public void applyToAll(Function<T, T> function) {
+        for (int row = 0; row < rows(); row++) {
+            for (int col = 0; col < cols(); col++) {
+                set(function.apply(get(row, col)), row, col);
+            }
+        }
+    }
+
+    /**
+     * Applies the specified operation on an element of the grid at the specified location
+     * @param function The operation to apply
+     * @param location The location of the element to apply the operation on
+     */
+    public void applyToLocation(Function<T, T> function, Coordinate location) {
+        set(function.apply(get(location)), location);
+    }
+
+    /**
+     * Applies the specified operation on an element of the grid at the specified location
+     * @param function The operation to apply
+     * @param row The row of the element to apply the operation on
+     * @param col The col of the element to apply the operation on
+     */
+    public void applyToLocation(Function<T, T> function, Integer row, Integer col) {
+        applyToLocation(function, new Coordinate(row, col));
     }
 
     @Override
