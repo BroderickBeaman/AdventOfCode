@@ -80,4 +80,12 @@ class GridTest {
         Grid<Integer> grid = new Grid<>(intArrays);
         assertEquals(List.of(new Coordinate(0, 2), new Coordinate(1, 0)), grid.findValues(4));
     }
+
+    @Test
+    void findAll() {
+        Integer[][] intArrays = {{1,2,4}, {4,5,6}};
+        Grid<Integer> grid = new Grid<>(intArrays);
+        List<Coordinate> locations = grid.findAll(location -> grid.get(location) > 5);
+        assertEquals(List.of(new Coordinate(1, 2)), locations);
+    }
 }

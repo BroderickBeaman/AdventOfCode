@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Predicate;
 
 /**
  * Utility class to assist in grid based problems
@@ -158,6 +159,24 @@ public class Grid<T> {
             for (int col = 0; col < cols(); col++) {
                 if (Objects.equals(get(row, col), value)) {
                     locations.add(new Coordinate(row, col));
+                }
+            }
+        }
+        return locations;
+    }
+
+    /**
+     * Finds all locations where a specified criteria is matched
+     * @param criteria The criteria to evaluate
+     * @return All locations that meet the criteria
+     */
+    public List<Coordinate> findAll(Predicate<Coordinate> criteria) {
+        List<Coordinate> locations = new ArrayList<>();
+        for (int row = 0; row < rows(); row++) {
+            for (int col = 0; col < cols(); col++) {
+                Coordinate at = new Coordinate(row, col);
+                if (criteria.test(at)) {
+                    locations.add(at);
                 }
             }
         }
